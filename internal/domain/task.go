@@ -1,8 +1,17 @@
 package domain
 
 import (
-	"github.com/pkg/errors"
 	"time"
+)
+
+type Priority uint8
+
+const (
+	Priority1 Priority = iota + 1
+	Priority2
+	Priority3
+	Priority4
+	Priority5
 )
 
 type optionsDate struct {
@@ -15,7 +24,7 @@ type Task struct {
 	title       string
 	description string
 	optionsDate optionsDate
-	level       uint8
+	priority    Priority
 }
 
 func (t *Task) GetCreateData() time.Time {
@@ -42,11 +51,6 @@ func (t *Task) SetEndDate(d time.Time) {
 	t.optionsDate.endDate = d
 }
 
-func (t *Task) SetLevelFrom1To5(level uint8) error {
-	if level < 1 && level > 5 {
-		return errors.New("level must be [1..5]")
-	}
-
-	t.level = level
-	return nil
+func (t *Task) SetLevelFrom1To5(priority Priority) {
+	t.priority = priority
 }
