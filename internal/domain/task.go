@@ -15,9 +15,9 @@ const (
 )
 
 type optionsDate struct {
-	createDate  time.Time
-	currentDate time.Time
-	endDate     time.Time
+	createDate       time.Time
+	currentDoingDate time.Time
+	endDate          time.Time
 }
 
 type Task struct {
@@ -27,12 +27,27 @@ type Task struct {
 	priority    Priority
 }
 
+func NewTaskWithCurrentDate(title string, description string, priority Priority) *Task {
+	oDate := optionsDate{
+		createDate:       time.Now(),
+		currentDoingDate: time.Now(),
+		endDate:          time.Now(),
+	}
+
+	return &Task{
+		title:       title,
+		description: description,
+		optionsDate: oDate,
+		priority:    priority,
+	}
+}
+
 func (t *Task) GetCreateData() time.Time {
 	return t.optionsDate.createDate
 }
 
 func (t *Task) GetCurrentData() time.Time {
-	return t.optionsDate.currentDate
+	return t.optionsDate.currentDoingDate
 }
 
 func (t *Task) GetEndDate() time.Time {
@@ -44,7 +59,7 @@ func (t *Task) SetCreateData(d time.Time) {
 }
 
 func (t *Task) SetCurrentData(d time.Time) {
-	t.optionsDate.currentDate = d
+	t.optionsDate.currentDoingDate = d
 }
 
 func (t *Task) SetEndDate(d time.Time) {
