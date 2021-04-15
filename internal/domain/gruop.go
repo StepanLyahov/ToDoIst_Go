@@ -1,19 +1,34 @@
 package domain
 
+import (
+	"fmt"
+)
+
 type Gruop struct {
 	title       string
 	description string
 	tasks       []Task
 }
 
-func (l *Gruop) getTasks() []Task {
-	return l.tasks
+func (g *Gruop) getTasks() []Task {
+	return g.tasks
 }
 
-func (l *Gruop) getTitle() string {
-	return l.title
+func (g *Gruop) getTitle() string {
+	return g.title
 }
 
-func (l *Gruop) getDescription() string {
-	return l.description
+func (g *Gruop) getDescription() string {
+	return g.description
+}
+
+func (g *Gruop) findTaskByTitle(title string) (Task, error) {
+
+	for _, task := range g.tasks {
+		if task.title == title {
+			return task, nil
+		}
+	}
+
+	return Task{}, fmt.Errorf("Task by title %v is not found", title)
 }
