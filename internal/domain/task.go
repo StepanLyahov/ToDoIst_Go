@@ -1,10 +1,19 @@
 package domain
 
 import (
+	"github.com/google/uuid"
 	"time"
 )
 
 type Priority uint8
+
+type TaskID struct {
+	value uuid.UUID
+}
+
+func NewTaskID() TaskID {
+	return TaskID{uuid.New()}
+}
 
 const (
 	Priority1 Priority = iota + 1
@@ -21,6 +30,7 @@ type optionsDate struct {
 }
 
 type Task struct {
+	id          TaskID
 	title       string
 	description string
 	optionsDate optionsDate
@@ -35,10 +45,11 @@ func NewTaskWithCurrentDate(title string, description string, priority Priority)
 	}
 
 	return &Task{
-		title:       title,
-		description: description,
-		optionsDate: oDate,
-		priority:    priority,
+		NewTaskID(),
+		title,
+		description,
+		oDate,
+		priority,
 	}
 }
 
@@ -68,4 +79,8 @@ func (t *Task) SetEndDate(d time.Time) {
 
 func (t *Task) SetLevelFrom1To5(priority Priority) {
 	t.priority = priority
+}
+
+func (t *Task) ID() TaskID {
+	return t.id
 }
