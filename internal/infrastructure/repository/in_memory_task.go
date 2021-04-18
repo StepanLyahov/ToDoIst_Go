@@ -14,6 +14,17 @@ func (i InMemoryTask) Save(task *domain.Task) error {
 	return nil
 }
 
+func (i InMemoryTask) Update(task *domain.Task) error {
+	_, err := i.db[task.ID()]
+	if err == false {
+		return errors.New("not found")
+	}
+
+	i.db[task.ID()] = task
+
+	return nil
+}
+
 func (i InMemoryTask) GetByID(id domain.TaskID) (*domain.Task, error) {
 	task, err := i.db[id]
 	if err == false {
