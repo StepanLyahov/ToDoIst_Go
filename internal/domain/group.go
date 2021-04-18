@@ -1,17 +1,13 @@
 package domain
 
-import (
-	"fmt"
-)
-
 type Group struct {
 	title       string
 	description string
-	tasks       []Task
+	taskIDs     []TaskID
 }
 
-func (g *Group) getTasks() []Task {
-	return g.tasks
+func (g *Group) getTasks() []TaskID {
+	return g.taskIDs
 }
 
 func (g *Group) getTitle() string {
@@ -22,13 +18,6 @@ func (g *Group) getDescription() string {
 	return g.description
 }
 
-func (g *Group) findTaskByTitle(title string) (Task, error) {
-
-	for _, task := range g.tasks {
-		if task.title == title {
-			return task, nil
-		}
-	}
-
-	return Task{}, fmt.Errorf("Task by title %v is not found", title)
+func (g *Group) AddTask(id TaskID) {
+	g.taskIDs = append(g.taskIDs, id)
 }
