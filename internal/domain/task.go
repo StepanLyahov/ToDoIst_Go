@@ -2,6 +2,7 @@ package domain
 
 import (
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 	"time"
 )
 
@@ -13,6 +14,11 @@ type TaskID struct {
 
 func NewTaskID() TaskID {
 	return TaskID{uuid.New()}
+}
+
+func NewTaskIDFromString(v string) (TaskID, error) {
+	value, err := uuid.Parse(v)
+	return TaskID{value}, errors.Wrapf(err, "%s is invalid task ID format", v)
 }
 
 const (

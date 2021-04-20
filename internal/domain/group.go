@@ -1,8 +1,8 @@
 package domain
 
 import (
-	"errors"
 	"github.com/google/uuid"
+	"github.com/pkg/errors"
 )
 
 type GroupID struct {
@@ -13,11 +13,16 @@ func NewGroupID() GroupID {
 	return GroupID{uuid.New()}
 }
 
+func NewGroupIDFromString(v string) (GroupID, error) {
+	value, err := uuid.Parse(v)
+	return GroupID{value}, errors.Wrapf(err, "%s is invalid group ID format", v)
+}
+
 type Group struct {
 	id          GroupID
 	title       string
 	description string
-	taskIDs     []TaskID
+	taskIDs     []TaskID // TODO переделать на мапу
 }
 
 func NewGroup(title string, description string) *Group {
