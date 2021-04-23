@@ -59,15 +59,15 @@ func NewTaskWithCurrentDate(title string, description string, priority Priority)
 	}
 }
 
-func (t *Task) GetCreateData() time.Time {
+func (t *Task) CreateData() time.Time {
 	return t.optionsDate.createDate
 }
 
-func (t *Task) GetCurrentData() time.Time {
+func (t *Task) CurrentData() time.Time {
 	return t.optionsDate.currentDoingDate
 }
 
-func (t *Task) GetEndDate() time.Time {
+func (t *Task) EndDate() time.Time {
 	return t.optionsDate.endDate
 }
 

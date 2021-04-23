@@ -37,15 +37,15 @@ func (g *Group) ID() GroupID {
 	return g.id
 }
 
-func (g *Group) GetTasks() []TaskID {
+func (g *Group) Tasks() []TaskID {
 	return g.taskIDs
 }
 
-func (g *Group) GetTitle() string {
+func (g *Group) Title() string {
 	return g.title
 }
 
-func (g *Group) GetDescription() string {
+func (g *Group) Description() string {
 	return g.description
 }
 
