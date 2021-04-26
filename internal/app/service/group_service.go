@@ -14,7 +14,7 @@ func NewGroupService(groupRepos repository.GroupRepository) *GroupService {
 	return &GroupService{groupRepos: groupRepos}
 }
 
-func (gs *GroupService) CreateNewGroup(title string, description string) (domain.GroupID, error) {
+func (gs *GroupService) Create(title string, description string) (domain.GroupID, error) {
 	group := domain.NewGroup(title, description)
 
 	err := gs.groupRepos.Save(group)
@@ -39,7 +39,7 @@ func (gs *GroupService) Delete(uuid string) error {
 }
 
 func (gs *GroupService) AddNewTaskToGroup(groupUuid string, taskUuid string) error {
-	group, err := gs.getGroupByID(groupUuid)
+	group, err := gs.GetGroupByID(groupUuid)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,32 @@ func (gs *GroupService) AddNewTaskToGroup(groupUuid string, taskUuid string) err
 	return nil
 }
 
-func (gs *GroupService) getGroupByID(groupUuid string) (*domain.Group, error) {
+func (gs *GroupService) DelTaskFromGroup(groupUuid string, taskUuid string) error {
+	group, err := gs.GetGroupByID(groupUuid)
+	if err != nil {
+		return err
+	}
+
+	task, errDb := gs.getTaskByID(taskUuid)
+	if errDb != nil {
+		return errDb
+	}
+
+	group.DelTask(task.ID())
+
+	errRepos := gs.groupRepos.Save(group)
+	if errRepos != nil {
+		return errRepos
+	}
+
+	return nil
+}
+
+func (gs *GroupService) GetAll() []*domain.Group {
+	return gs.groupRepos.GetAll()
+}
+
+func (gs *GroupService) GetGroupByID(groupUuid string) (*domain.Group, error) {
 	groupID, err := domain.NewGroupIDFromString(groupUuid)
 	if err != nil {
 		return &domain.Group{}, err
