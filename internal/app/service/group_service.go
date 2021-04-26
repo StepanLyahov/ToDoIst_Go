@@ -10,8 +10,13 @@ type GroupService struct {
 	taskRepos  repository.TaskRepository
 }
 
-func NewGroupService(groupRepos repository.GroupRepository) *GroupService {
-	return &GroupService{groupRepos: groupRepos}
+func NewGroupService(groupRepos repository.GroupRepository,
+	taskRepos repository.TaskRepository) *GroupService {
+
+	return &GroupService{
+		groupRepos: groupRepos,
+		taskRepos: taskRepos,
+	}
 }
 
 func (gs *GroupService) Create(title string, description string) (domain.GroupID, error) {
