@@ -8,6 +8,32 @@ import (
 
 type Priority uint8
 
+const (
+	Priority1 Priority = iota + 1
+	Priority2
+	Priority3
+	Priority4
+	Priority5
+	Error
+)
+
+func NewPriorityFromUint8(priority uint8) (Priority, error) {
+	switch priority {
+	case 1:
+		return Priority1, nil
+	case 2:
+		return Priority2, nil
+	case 3:
+		return Priority3, nil
+	case 4:
+		return Priority4, nil
+	case 5:
+		return Priority5, nil
+	default:
+		return Error, errors.New("can't parse to Priority")
+	}
+}
+
 type TaskID struct {
 	value uuid.UUID
 }
@@ -20,14 +46,6 @@ func NewTaskIDFromString(v string) (TaskID, error) {
 	value, err := uuid.Parse(v)
 	return TaskID{value}, errors.Wrapf(err, "%s is invalid task ID format", v)
 }
-
-const (
-	Priority1 Priority = iota + 1
-	Priority2
-	Priority3
-	Priority4
-	Priority5
-)
 
 type optionsDate struct {
 	createDate       time.Time
