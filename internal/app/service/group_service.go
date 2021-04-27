@@ -106,8 +106,8 @@ func (gs *GroupService) GetGroupByID(groupUuid string) (*domain.Group, error) {
 	return group, nil
 }
 
-func (gs *GroupService) getTaskByID(groupUuid string) (*domain.Task, error) {
-	taskID, err := domain.NewTaskIDFromString(groupUuid)
+func (gs *GroupService) getTaskByID(taskUuid string) (*domain.Task, error) {
+	taskID, err := domain.NewTaskIDFromString(taskUuid)
 	if err != nil {
 		return &domain.Task{}, err
 	}
