@@ -1,6 +1,7 @@
 package command
 
 import (
+	"app/query"
 	"app/repository"
 	"domain"
 )
@@ -10,11 +11,6 @@ type AddNewTaskToGroupHandler struct {
 	taskRepos  repository.TaskRepository
 }
 
-type TaskDto struct {
-	title       string
-	description string
-	priority    uint8
-}
 
 func NewAddNewTaskToGroupHandler(groupRepos repository.GroupRepository,
 	taskRepos repository.TaskRepository) AddNewTaskToGroupHandler {
@@ -24,7 +20,7 @@ func NewAddNewTaskToGroupHandler(groupRepos repository.GroupRepository,
 	}
 }
 
-func (h AddNewTaskToGroupHandler) Execute(groupUuid string, taskDto TaskDto) (domain.TaskID, error) {
+func (h AddNewTaskToGroupHandler) Execute(groupUuid string, taskDto query.TaskDto) (domain.TaskID, error) {
 	taskId, err := h.createTaskAndSave(taskDto)
 	if err != nil {
 		return domain.TaskID{}, err
@@ -38,13 +34,13 @@ func (h AddNewTaskToGroupHandler) Execute(groupUuid string, taskDto TaskDto) (do
 	return taskId, nil
 }
 
-func (h AddNewTaskToGroupHandler) createTaskAndSave(taskDto TaskDto) (domain.TaskID, error) {
-	pr, err := domain.NewPriorityFromUint8(taskDto.priority)
+func (h AddNewTaskToGroupHandler) createTaskAndSave(taskDto query.TaskDto) (domain.TaskID, error) {
+	pr, err := domain.NewPriorityFromUint8(taskDto.Priority)
 	if err != nil {
 		return domain.TaskID{}, err
 	}
 
-	task := domain.NewTaskWithCurrentDate(taskDto.title, taskDto.description, pr)
+	task := domain.NewTaskWithCurrentDate(taskDto.Title, taskDto.Description, pr)
 
 	errTask := h.taskRepos.Save(task)
 	if errTask != nil {

@@ -29,25 +29,51 @@ func GroupToDto(group domain.Group) GroupDto {
 }
 
 type TaskDto struct {
-	id               string
-	title            string
-	description      string
-	priority         uint8
-	createDate       time.Time
-	currentDoingDate time.Time
-	endDate          time.Time
+	Id               string
+	Title            string
+	Description      string
+	Priority         uint8
+	CreateDate       time.Time
+	CurrentDoingDate time.Time
+	EndDate          time.Time
 }
 
 func TaskToDto(task domain.Task) TaskDto {
 	dto := TaskDto{
-		id:               task.ID().String(),
-		title:            task.Title(),
-		description:      task.Description(),
-		priority:         task.Priority().Uint8(),
-		createDate:       task.CreateData(),
-		currentDoingDate: task.CurrentData(),
-		endDate:          task.EndDate(),
+		Id:               task.ID().String(),
+		Title:            task.Title(),
+		Description:      task.Description(),
+		Priority:         task.Priority().Uint8(),
+		CreateDate:       task.CreateData(),
+		CurrentDoingDate: task.CurrentData(),
+		EndDate:          task.EndDate(),
 	}
 
 	return dto
+}
+
+func TaskToDomain(dto TaskDto) (domain.Task, error) {
+	d := domain.Task{}
+
+	d.SetDescription(dto.Description)
+
+	uuid, err := domain.NewTaskIDFromString(dto.Id)
+	if err != nil {
+		return domain.Task{}, err
+	}
+
+	d.SetId(uuid)
+	d.SetTitle(dto.Title)
+
+	d.SetCreateData(dto.CreateDate)
+	d.SetCurrentData(dto.CurrentDoingDate)
+	d.SetEndDate(dto.EndDate)
+
+	pr, err := domain.NewPriorityFromUint8(dto.Priority)
+	if err != nil {
+		return domain.Task{}, err
+	}
+	d.SetPriority(pr)
+
+	return d, nil
 }
