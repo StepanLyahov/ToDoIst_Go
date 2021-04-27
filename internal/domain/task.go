@@ -81,6 +81,22 @@ type Task struct {
 	priority    Priority
 }
 
+func (t *Task) SetId(id TaskID) {
+	t.id = id
+}
+
+func (t *Task) SetTitle(title string) {
+	t.title = title
+}
+
+func (t *Task) SetDescription(description string) {
+	t.description = description
+}
+
+func (t *Task) SetPriority(priority Priority) {
+	t.priority = priority
+}
+
 func NewTaskWithCurrentDate(title string, description string, priority Priority) *Task {
 	oDate := optionsDate{
 		createDate:       time.Now(),
