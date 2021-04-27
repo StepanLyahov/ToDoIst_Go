@@ -1,4 +1,4 @@
-package command
+package query
 
 import (
 	"app/repository"
@@ -13,16 +13,18 @@ func NewGetTaskByIdHandler(rep repository.TaskRepository) GetTaskByIdHandler {
 	return GetTaskByIdHandler{taskRepos: rep}
 }
 
-func (h GetTaskByIdHandler) Execute(taskUuid string) (*domain.Task, error) {
+func (h GetTaskByIdHandler) Execute(taskUuid string) (TaskDto, error) {
 	taskID, err := domain.NewTaskIDFromString(taskUuid)
 	if err != nil {
-		return &domain.Task{}, err
+		return TaskDto{}, err
 	}
 
 	task, err := h.taskRepos.GetByID(taskID)
 	if err != nil {
-		return &domain.Task{}, err
+		return TaskDto{}, err
 	}
 
-	return task, nil
+	taskDto := TaskToDto(*task)
+
+	return taskDto, nil
 }

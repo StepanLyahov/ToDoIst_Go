@@ -1,4 +1,4 @@
-package command
+package query
 
 import (
 	"app/repository"
@@ -13,16 +13,17 @@ func NewGetGroupByIdHandler(rep repository.GroupRepository) GetGroupByIdHandler 
 	return GetGroupByIdHandler{groupRepos: rep}
 }
 
-func (h GetGroupByIdHandler) Execute(groupUuid string) (*domain.Group, error) {
+func (h GetGroupByIdHandler) Execute(groupUuid string) (GroupDto, error) {
 	groupID, err := domain.NewGroupIDFromString(groupUuid)
 	if err != nil {
-		return &domain.Group{}, err
+		return GroupDto{}, err
 	}
 
 	group, err := h.groupRepos.GetByID(groupID)
 	if err != nil {
-		return &domain.Group{}, err
+		return GroupDto{}, err
 	}
+	 groupDtp := GroupToDto(*group)
 
-	return group, nil
+	return groupDtp, nil
 }
