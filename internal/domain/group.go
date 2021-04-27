@@ -9,6 +9,10 @@ type GroupID struct {
 	value uuid.UUID
 }
 
+func (t GroupID) String() string {
+	return t.value.String()
+}
+
 func NewGroupID() GroupID {
 	return GroupID{uuid.New()}
 }

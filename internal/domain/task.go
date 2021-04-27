@@ -8,6 +8,22 @@ import (
 
 type Priority uint8
 
+func (p Priority) Uint8() uint8 {
+	switch p {
+	case Priority1:
+		return 1
+	case Priority2:
+		return 2
+	case Priority3:
+		return 3
+	case Priority4:
+		return 4
+	case Priority5:
+		return 5
+	}
+	return 0
+}
+
 const (
 	Priority1 Priority = iota + 1
 	Priority2
@@ -36,6 +52,10 @@ func NewPriorityFromUint8(priority uint8) (Priority, error) {
 
 type TaskID struct {
 	value uuid.UUID
+}
+
+func (t TaskID) String() string {
+	return t.value.String()
 }
 
 func NewTaskID() TaskID {
@@ -75,6 +95,18 @@ func NewTaskWithCurrentDate(title string, description string, priority Priority)
 		oDate,
 		priority,
 	}
+}
+
+func (t *Task) Description() string {
+	return t.description
+}
+
+func (t *Task) Title() string {
+	return t.title
+}
+
+func (t *Task) Priority() Priority {
+	return t.priority
 }
 
 func (t *Task) CreateData() time.Time {
