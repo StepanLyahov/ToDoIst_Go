@@ -9,6 +9,14 @@ type InMemoryTask struct {
 	db map[domain.TaskID]*domain.Task
 }
 
+func NewInMemoryTask() InMemoryTask {
+	db := make(map[domain.TaskID]*domain.Task)
+
+	return InMemoryTask {
+		db: db,
+	}
+}
+
 func (i InMemoryTask) Save(task *domain.Task) error {
 	i.db[task.ID()] = task
 	return nil
