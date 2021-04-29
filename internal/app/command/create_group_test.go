@@ -12,7 +12,7 @@ func TestCreateGroup(t *testing.T) {
 		Description: "Description",
 	}
 
-	h := initHandler()
+	h := NewCreateGroupHandler(repository.NewInMemoryGroup())
 	id, err := h.Execute(gDto)
 
 	if err != nil {
@@ -33,16 +33,10 @@ func TestCreateGroup(t *testing.T) {
 	}
 
 }
-
-func initHandler() CreateGroupHandler {
-	return NewCreateGroupHandler(repository.NewInMemoryGroup())
-}
-
 func compare(gDto GroupDTO, group domain.Group) bool {
 	if gDto.Description != group.Description() {
 		return false
 	}
-
 	if gDto.Title != group.Title() {
 		return false
 	}
