@@ -35,7 +35,7 @@ func TestCreateGroup(t *testing.T) {
 }
 
 func initHandler() CreateGroupHandler {
-	return CreateGroupHandler{groupRepos: repository.NewInMemoryGroup()}
+	return NewCreateGroupHandler(repository.NewInMemoryGroup())
 }
 
 func compare(gDto GroupDTO, group domain.Group) bool {
