@@ -33,7 +33,7 @@ func TestDeleteTaskFromGroupValidID(t *testing.T) {
 
 func addRelatedGroupAndTaskInRepo(tRep repository2.TaskRepository, gRep repository2.GroupRepository) (taskID domain.TaskID, groupID domain.GroupID) {
 
-	task := domain.NewTaskWithCurrentDate("titile", "desc", domain.Priority1)
+	task := domain.NewTaskWithCurrentDate("title", "desc", domain.Priority1)
 	group := domain.NewGroup("titleG", "descG")
 
 	_ = group.AddTask(task.ID())
