@@ -1,0 +1,56 @@
+openapi: 3.0.3
+info:
+  title: ToDoList
+  description: backend for TodoIst
+  version: 1.0.0
+servers:
+  - url: 'https://{hostname}/api'
+    variables:
+      hostname:
+        default: localhost
+paths:
+  /group/create:
+    post:
+      operationId: createGroup
+      requestBody:
+        description: create new a group
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGroupRequest'
+      responses:
+        '201':
+          headers:
+            Content-Location:
+              description: created a group
+              schema:
+                type: string
+          description: group created
+        '400':
+          description: invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+components:
+  schemas:
+    CreateGroupRequest:
+      type: object
+      required: [ title, description ]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+
+    Error:
+      type: object
+      required: [ slug, details ]
+      properties:
+        slug:
+          type: string
+        details:
+          type: string

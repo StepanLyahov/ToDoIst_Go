@@ -1,0 +1,6 @@
+output:
+  internal/web/openapi.gen.go
+package: web
+generate:
+  - types
+  - chi-server
