@@ -1,9 +1,9 @@
 package command
 
 import (
-	"app/query"
-	"app/repository"
-	"domain"
+	"app/app/query"
+	"app/app/repository"
+	"app/domain"
 )
 
 type ChangeTaskHandler struct {

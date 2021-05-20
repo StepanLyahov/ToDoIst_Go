@@ -1,16 +1,15 @@
 package command
 
 import (
-	"app/query"
-	"app/repository"
-	"domain"
+	"app/app/query"
+	"app/app/repository"
+	"app/domain"
 )
 
 type AddNewTaskToGroupHandler struct {
 	groupRepos repository.GroupRepository
 	taskRepos  repository.TaskRepository
 }
-
 
 func NewAddNewTaskToGroupHandler(groupRepos repository.GroupRepository,
 	taskRepos repository.TaskRepository) AddNewTaskToGroupHandler {

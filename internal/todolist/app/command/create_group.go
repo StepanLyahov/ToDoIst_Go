@@ -1,8 +1,8 @@
 package command
 
 import (
-	"app/repository"
-	"domain"
+	"app/app/repository"
+	"app/domain"
 )
 
 type CreateGroupHandler struct {

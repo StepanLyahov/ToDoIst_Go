@@ -1,9 +1,8 @@
 package command
 
 import (
-	repository2 "app/repository"
-	"domain"
-	"infrastructure/repository"
+	"app/domain"
+	"app/infrastructure/repository"
 	"testing"
 )
 
@@ -31,7 +30,7 @@ func TestDeleteTaskFromGroupValidID(t *testing.T) {
 	}
 }
 
-func addRelatedGroupAndTaskInRepo(tRep repository2.TaskRepository, gRep repository2.GroupRepository) (taskID domain.TaskID, groupID domain.GroupID) {
+func addRelatedGroupAndTaskInRepo(tRep repository.InMemoryTask, gRep repository.InMemoryGroup) (taskID domain.TaskID, groupID domain.GroupID) {
 
 	task := domain.NewTaskWithCurrentDate("title", "desc", domain.Priority1)
 	group := domain.NewGroup("titleG", "descG")

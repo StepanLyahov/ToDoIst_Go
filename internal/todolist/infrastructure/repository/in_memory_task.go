@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"domain"
-	"errors"
+	"app/domain"
+	"github.com/pkg/errors"
 )
 
 type InMemoryTask struct {
@@ -12,7 +12,7 @@ type InMemoryTask struct {
 func NewInMemoryTask() InMemoryTask {
 	db := make(map[domain.TaskID]*domain.Task)
 
-	return InMemoryTask {
+	return InMemoryTask{
 		db: db,
 	}
 }

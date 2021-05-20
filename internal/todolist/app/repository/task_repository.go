@@ -1,8 +1,6 @@
 package repository
 
-import (
-	"domain"
-)
+import "app/domain"
 
 type TaskRepository interface {
 	Save(task *domain.Task) error

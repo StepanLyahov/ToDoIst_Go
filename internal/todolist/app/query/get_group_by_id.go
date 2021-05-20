@@ -1,8 +1,8 @@
 package query
 
 import (
-	"app/repository"
-	"domain"
+	"app/app/repository"
+	"app/domain"
 )
 
 type GetGroupByIdHandler struct {
@@ -23,7 +23,7 @@ func (h GetGroupByIdHandler) Execute(groupUuid string) (GroupDto, error) {
 	if err != nil {
 		return GroupDto{}, err
 	}
-	 groupDtp := GroupToDto(*group)
+	groupDtp := GroupToDto(*group)
 
 	return groupDtp, nil
 }

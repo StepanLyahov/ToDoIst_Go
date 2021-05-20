@@ -1,7 +1,7 @@
 package query
 
 import (
-	"domain"
+	"app/domain"
 	"time"
 )
 

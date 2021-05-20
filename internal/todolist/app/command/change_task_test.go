@@ -1,9 +1,9 @@
 package command
 
 import (
-	"app/query"
-	"domain"
-	"infrastructure/repository"
+	"app/app/query"
+	"app/domain"
+	"app/infrastructure/repository"
 	"testing"
 )
 

@@ -1,5 +1,5 @@
 output:
-  internal/app/web/openapi.gen.go
+  internal/todolist/app/web/openapi.gen.go
 package: web
 generate:
   - types

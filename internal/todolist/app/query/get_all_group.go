@@ -1,8 +1,6 @@
 package query
 
-import (
-	"app/repository"
-)
+import "app/app/repository"
 
 type GetAllGroupHandler struct {
 	groupRepos repository.GroupRepository

@@ -1,8 +1,8 @@
 package command
 
 import (
-	"domain"
-	"infrastructure/repository"
+	"app/domain"
+	"app/infrastructure/repository"
 	"testing"
 )
 
