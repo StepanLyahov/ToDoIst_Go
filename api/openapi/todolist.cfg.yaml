@@ -1,5 +1,5 @@
 output:
-  internal/web/openapi.gen.go
+  internal/app/web/openapi.gen.go
 package: web
 generate:
   - types
