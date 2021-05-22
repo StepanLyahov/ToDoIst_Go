@@ -12,10 +12,10 @@ import (
 )
 
 func main() {
-	app := newApplication()
+	application := newApplication()
 
 	server.RunHTTPServer(func(router chi.Router) http.Handler {
-		return web.HandlerFromMux(web.NewHTTPServer(app), router)
+		return web.HandlerFromMux(web.NewHTTPServer(application), router)
 	})
 }
 
