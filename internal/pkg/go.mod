@@ -1,4 +1,4 @@
-module pkg
+module github.com/StepanLyahov/ToDoIst_Go/internal/pkg
 
 go 1.16
 
