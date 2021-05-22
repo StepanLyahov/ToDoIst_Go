@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"app/domain"
 	"github.com/pkg/errors"
+	"todolist/domain"
 )
 
 type InMemoryTask struct {

@@ -1,8 +1,8 @@
 package query
 
 import (
-	"app/domain"
 	"time"
+	"todolist/domain"
 )
 
 type GroupDto struct {

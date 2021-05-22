@@ -1,8 +1,8 @@
 package app
 
 import (
-	"app/app/command"
-	"app/app/query"
+	"todolist/app/command"
+	"todolist/app/query"
 )
 
 type Application struct {

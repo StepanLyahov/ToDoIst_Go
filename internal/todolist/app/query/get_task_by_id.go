@@ -1,8 +1,8 @@
 package query
 
 import (
-	"app/app/repository"
-	"app/domain"
+	"todolist/app/repository"
+	"todolist/domain"
 )
 
 type GetTaskByIdHandler struct {

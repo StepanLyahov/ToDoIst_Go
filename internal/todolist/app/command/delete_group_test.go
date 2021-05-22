@@ -1,10 +1,10 @@
 package command
 
 import (
-	"app/domain"
-	"app/infrastructure/repository"
 	"log"
 	"testing"
+	"todolist/domain"
+	"todolist/infrastructure/repository"
 )
 
 func TestDeleteGroup(t *testing.T) {

@@ -1,14 +1,22 @@
 package main
 
 import (
-	"app/app"
-	"app/app/command"
-	"app/app/query"
-	"app/infrastructure/repository"
+	"github.com/go-chi/chi/v5"
+	"net/http"
+	"pkg/server"
+	"todolist/app"
+	"todolist/app/command"
+	"todolist/app/query"
+	"todolist/infrastructure/repository"
+	"todolist/infrastructure/web"
 )
 
 func main() {
+	app := newApplication()
 
+	server.RunHTTPServer(func(router chi.Router) http.Handler {
+		return web.HandlerFromMux(web.NewHTTPServer(app), router)
+	})
 }
 
 func newApplication() app.Application {

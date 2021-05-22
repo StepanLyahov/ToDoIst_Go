@@ -1,6 +1,6 @@
 package repository
 
-import "app/domain"
+import "todolist/domain"
 
 type GroupRepository interface {
 	Save(group *domain.Group) error

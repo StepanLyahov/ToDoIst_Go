@@ -1,10 +1,10 @@
 package command
 
 import (
-	"app/app/query"
-	"app/domain"
-	"app/infrastructure/repository"
 	"testing"
+	"todolist/app/query"
+	"todolist/domain"
+	"todolist/infrastructure/repository"
 )
 
 func TestChangeTask(t *testing.T) {
