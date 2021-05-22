@@ -1,10 +1,10 @@
 package command
 
 import (
+	"github.com/StepanLyahov/ToDoIst/todolist/domain"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
 	"log"
 	"testing"
-	"todolist/domain"
-	"todolist/infrastructure/repository"
 )
 
 func TestDeleteGroup(t *testing.T) {

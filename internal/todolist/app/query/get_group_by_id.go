@@ -1,8 +1,8 @@
 package query
 
 import (
-	"todolist/app/repository"
-	"todolist/domain"
+	"github.com/StepanLyahov/ToDoIst/todolist/app/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/domain"
 )
 
 type GetGroupByIdHandler struct {

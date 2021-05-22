@@ -1,9 +1,9 @@
 package command
 
 import (
-	"todolist/app/query"
-	"todolist/app/repository"
-	"todolist/domain"
+	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
+	"github.com/StepanLyahov/ToDoIst/todolist/app/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/domain"
 )
 
 type AddNewTaskToGroupHandler struct {

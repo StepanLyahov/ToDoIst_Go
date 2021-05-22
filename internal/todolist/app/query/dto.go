@@ -1,8 +1,8 @@
 package query
 
 import (
+	"github.com/StepanLyahov/ToDoIst/todolist/domain"
 	"time"
-	"todolist/domain"
 )
 
 type GroupDto struct {

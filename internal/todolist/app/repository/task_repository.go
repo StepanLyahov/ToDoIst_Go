@@ -1,6 +1,6 @@
 package repository
 
-import "todolist/domain"
+import "github.com/StepanLyahov/ToDoIst/todolist/domain"
 
 type TaskRepository interface {
 	Save(task *domain.Task) error

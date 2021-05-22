@@ -1,10 +1,10 @@
 package command
 
 import (
+	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
+	"github.com/StepanLyahov/ToDoIst/todolist/domain"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
 	"testing"
-	"todolist/app/query"
-	"todolist/domain"
-	"todolist/infrastructure/repository"
 )
 
 func TestChangeTask(t *testing.T) {

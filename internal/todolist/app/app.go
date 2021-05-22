@@ -1,8 +1,8 @@
 package app
 
 import (
-	"todolist/app/command"
-	"todolist/app/query"
+	"github.com/StepanLyahov/ToDoIst/todolist/app/command"
+	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
 )
 
 type Application struct {

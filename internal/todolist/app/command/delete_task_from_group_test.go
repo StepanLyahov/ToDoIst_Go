@@ -1,9 +1,9 @@
 package command
 
 import (
+	"github.com/StepanLyahov/ToDoIst/todolist/domain"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
 	"testing"
-	"todolist/domain"
-	"todolist/infrastructure/repository"
 )
 
 func TestDeleteTaskFromGroupValidID(t *testing.T) {

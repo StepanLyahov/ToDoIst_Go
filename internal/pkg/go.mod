@@ -1,8 +1,5 @@
-module github.com/StepanLyahov/ToDoIst_Go/internal/pkg
+module github.com/StepanLyahov/ToDoIst/pkg
 
 go 1.16
 
-require (
-	github.com/go-chi/chi/v5 v5.0.3
-	github.com/sirupsen/logrus v1.8.1
-)
+require github.com/go-chi/chi/v5 v5.0.3

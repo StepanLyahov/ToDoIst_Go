@@ -1,6 +1,6 @@
 package query
 
-import "todolist/app/repository"
+import "github.com/StepanLyahov/ToDoIst/todolist/app/repository"
 
 type GetAllGroupHandler struct {
 	groupRepos repository.GroupRepository

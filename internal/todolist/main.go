@@ -1,14 +1,14 @@
 package main
 
 import (
+	"github.com/StepanLyahov/ToDoIst/pkg/server"
+	"github.com/StepanLyahov/ToDoIst/todolist/app"
+	"github.com/StepanLyahov/ToDoIst/todolist/app/command"
+	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/web"
 	"github.com/go-chi/chi/v5"
 	"net/http"
-	"pkg/server"
-	"todolist/app"
-	"todolist/app/command"
-	"todolist/app/query"
-	"todolist/infrastructure/repository"
-	"todolist/infrastructure/web"
 )
 
 func main() {
