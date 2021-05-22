@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/StepanLyahov/ToDoIst/pkg/server"
 	"github.com/StepanLyahov/ToDoIst/todolist/app"
 	"github.com/StepanLyahov/ToDoIst/todolist/app/command"
 	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
 	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
 	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/web"
+	"github.com/StepanLyahov/ToDoIst/todolist/support/server"
 	"github.com/go-chi/chi/v5"
 	"net/http"
 )
