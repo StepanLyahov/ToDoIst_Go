@@ -31,11 +31,28 @@ type GroupResponse struct {
 	Title       *string   `json:"title,omitempty"`
 }
 
+// Task defines model for Task.
+type Task struct {
+	CreateDate       *string `json:"createDate,omitempty"`
+	CurrentDoingDate *string `json:"currentDoingDate,omitempty"`
+	Description      *string `json:"description,omitempty"`
+	EndDate          *string `json:"endDate,omitempty"`
+	Id               *string `json:"id,omitempty"`
+	Priority         *int    `json:"priority,omitempty"`
+	Title            *string `json:"title,omitempty"`
+}
+
 // CreateGroupJSONBody defines parameters for CreateGroup.
 type CreateGroupJSONBody CreateGroupRequest
 
+// AddTaskInGroupJSONBody defines parameters for AddTaskInGroup.
+type AddTaskInGroupJSONBody Task
+
 // CreateGroupJSONRequestBody defines body for CreateGroup for application/json ContentType.
 type CreateGroupJSONRequestBody CreateGroupJSONBody
+
+// AddTaskInGroupJSONRequestBody defines body for AddTaskInGroup for application/json ContentType.
+type AddTaskInGroupJSONRequestBody AddTaskInGroupJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -45,6 +62,9 @@ type ServerInterface interface {
 
 	// (GET /group/{groupId})
 	GetGroup(w http.ResponseWriter, r *http.Request, groupId string)
+
+	// (POST /group/{groupId}/addTask)
+	AddTaskInGroup(w http.ResponseWriter, r *http.Request, groupId string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -96,6 +116,32 @@ func (siw *ServerInterfaceWrapper) GetGroup(w http.ResponseWriter, r *http.Reque
 	handler(w, r.WithContext(ctx))
 }
 
+// AddTaskInGroup operation middleware
+func (siw *ServerInterfaceWrapper) AddTaskInGroup(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "groupId" -------------
+	var groupId string
+
+	err = runtime.BindStyledParameter("simple", false, "groupId", chi.URLParam(r, "groupId"), &groupId)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid format for parameter groupId: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AddTaskInGroup(w, r, groupId)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
 // Handler creates http.Handler with routing matching OpenAPI spec.
 func Handler(si ServerInterface) http.Handler {
 	return HandlerWithOptions(si, ChiServerOptions{})
@@ -138,6 +184,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/group/{groupId}", wrapper.GetGroup)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/group/{groupId}/addTask", wrapper.AddTaskInGroup)
 	})
 
 	return r

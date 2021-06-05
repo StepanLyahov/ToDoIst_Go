@@ -53,6 +53,32 @@ paths:
               schema:
                 $ref: '#/components/schemas/GroupResponse'
 
+  /group/{groupId}/addTask:
+    post:
+      operationId: AddTaskInGroup
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: group id
+      requestBody:
+        description: create new a task
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          headers:
+            Content-Location:
+              description: task created and added in group
+              schema:
+                type: string
+          description: task created
 
 components:
   schemas:
@@ -79,6 +105,27 @@ components:
           items:
             type: string
             format: uuid
+
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        priority:
+          type: integer
+        createDate:
+          type: string
+        currentDoingDate:
+          type: string
+        endDate:
+          type: string
+
+
+
 
     Error:
       type: object
