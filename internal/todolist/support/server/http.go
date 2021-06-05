@@ -3,7 +3,6 @@ package server
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"log"
 	"net/http"
 )
 
@@ -17,8 +16,6 @@ func RunHTTPServerOnAddress(addr string, handler func(router chi.Router) http.Ha
 
 	rootRouter := chi.NewRouter()
 	rootRouter.Mount("/api", handler(apiRouter))
-
-	log.Println("It is alive!!!!")
 
 	_ = http.ListenAndServe(addr, rootRouter)
 }
