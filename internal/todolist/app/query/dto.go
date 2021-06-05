@@ -6,10 +6,10 @@ import (
 )
 
 type GroupDto struct {
-	id          string
-	title       string
-	description string
-	taskIDs     []string
+	Id          string
+	Title       string
+	Description string
+	TaskIDs     []string
 }
 
 func GroupToDto(group domain.Group) GroupDto {
@@ -19,10 +19,10 @@ func GroupToDto(group domain.Group) GroupDto {
 	}
 
 	dto := GroupDto{
-		id:          group.ID().String(),
-		title:       group.Title(),
-		description: group.Description(),
-		taskIDs:     taskIDStr,
+		Id:          group.ID().String(),
+		Title:       group.Title(),
+		Description: group.Description(),
+		TaskIDs:     taskIDStr,
 	}
 
 	return dto

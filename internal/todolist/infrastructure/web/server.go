@@ -20,14 +20,14 @@ func NewHTTPServer(app app.Application) HTTPServer {
 func (H HTTPServer) CreateGroup(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		responseWithErr("Err read body", err.Error(), w, 500)
+		buildResponseWithErr("Err read body", err.Error(), w, 500)
 		return
 	}
 
 	res := CreateGroupRequest{}
 	err = json.Unmarshal(reqBody, &res)
 	if err != nil {
-		responseWithErr("Err parse body", err.Error(), w, 500)
+		buildResponseWithErr("Err parse body", err.Error(), w, 500)
 		return
 	}
 
@@ -38,7 +38,7 @@ func (H HTTPServer) CreateGroup(w http.ResponseWriter, r *http.Request) {
 
 	execute, err := H.app.Commands.CreateGroup.Execute(groupDto)
 	if err != nil {
-		responseWithErr("Internal err", err.Error(), w, 500)
+		buildResponseWithErr("Internal err", err.Error(), w, 500)
 		return
 	}
 
@@ -46,7 +46,34 @@ func (H HTTPServer) CreateGroup(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func responseWithErr(slug string, details string, w http.ResponseWriter, status int) {
+func (H HTTPServer) GetGroup(w http.ResponseWriter, r *http.Request, groupId string) {
+
+	execute, err := H.app.Queries.GetGroupById.Execute(groupId)
+	if err != nil {
+		buildResponseWithErr("Err GetGroup by Id", err.Error(), w, http.StatusNotFound)
+		return
+	}
+
+	response := GroupResponse{
+		Description: &execute.Description,
+		Id:          &execute.Id,
+		TaskIDs:     &execute.TaskIDs,
+		Title:       &execute.Title,
+	}
+
+	buildResponse(response, w, http.StatusCreated)
+}
+
+func buildResponse(v interface{}, w http.ResponseWriter, status int) {
+	w.WriteHeader(status)
+
+	err := json.NewEncoder(w).Encode(v)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func buildResponseWithErr(slug string, details string, w http.ResponseWriter, status int) {
 	w.WriteHeader(status)
 
 	errResponse := Error{

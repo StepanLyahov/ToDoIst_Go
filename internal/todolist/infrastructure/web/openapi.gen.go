@@ -4,8 +4,10 @@
 package web
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/go-chi/chi/v5"
 )
 
@@ -21,6 +23,14 @@ type Error struct {
 	Slug    string `json:"slug"`
 }
 
+// GroupResponse defines model for GroupResponse.
+type GroupResponse struct {
+	Description *string   `json:"description,omitempty"`
+	Id          *string   `json:"id,omitempty"`
+	TaskIDs     *[]string `json:"taskIDs,omitempty"`
+	Title       *string   `json:"title,omitempty"`
+}
+
 // CreateGroupJSONBody defines parameters for CreateGroup.
 type CreateGroupJSONBody CreateGroupRequest
 
@@ -32,6 +42,9 @@ type ServerInterface interface {
 
 	// (POST /group/create)
 	CreateGroup(w http.ResponseWriter, r *http.Request)
+
+	// (GET /group/{groupId})
+	GetGroup(w http.ResponseWriter, r *http.Request, groupId string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -48,6 +61,32 @@ func (siw *ServerInterfaceWrapper) CreateGroup(w http.ResponseWriter, r *http.Re
 
 	var handler = func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreateGroup(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
+// GetGroup operation middleware
+func (siw *ServerInterfaceWrapper) GetGroup(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "groupId" -------------
+	var groupId string
+
+	err = runtime.BindStyledParameter("simple", false, "groupId", chi.URLParam(r, "groupId"), &groupId)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid format for parameter groupId: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetGroup(w, r, groupId)
 	}
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -96,6 +135,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/group/create", wrapper.CreateGroup)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/group/{groupId}", wrapper.GetGroup)
 	})
 
 	return r
