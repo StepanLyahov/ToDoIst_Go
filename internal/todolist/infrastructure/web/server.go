@@ -31,7 +31,7 @@ func (H HTTPServer) CreateGroup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	groupDto := command.GroupDTO{
+	groupDto := command.CreateGroupDTO{
 		Title:       res.Title,
 		Description: res.Description,
 	}

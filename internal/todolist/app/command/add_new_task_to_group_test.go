@@ -8,7 +8,7 @@ import (
 )
 
 func initGroupHandlerBeforeTest(h *AddNewTaskToGroupHandler) domain.GroupID {
-	gDto := GroupDTO{
+	gDto := CreateGroupDTO{
 		Title:       "Title",
 		Description: "Description",
 	}

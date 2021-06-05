@@ -7,7 +7,7 @@ import (
 )
 
 func TestCreateGroup(t *testing.T) {
-	gDto := GroupDTO{
+	gDto := CreateGroupDTO{
 		Title:       "Title",
 		Description: "Description",
 	}
@@ -33,7 +33,7 @@ func TestCreateGroup(t *testing.T) {
 	}
 
 }
-func compare(gDto GroupDTO, group domain.Group) bool {
+func compare(gDto CreateGroupDTO, group domain.Group) bool {
 	if gDto.Description != group.Description() {
 		return false
 	}
