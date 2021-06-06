@@ -4,7 +4,7 @@ import (
 	"github.com/StepanLyahov/ToDoIst/todolist/app"
 	"github.com/StepanLyahov/ToDoIst/todolist/app/command"
 	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
-	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository/in_memory"
 	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/web"
 	"github.com/StepanLyahov/ToDoIst/todolist/support/server"
 	"github.com/go-chi/chi/v5"
@@ -20,8 +20,8 @@ func main() {
 }
 
 func newApplication() app.Application {
-	taskRep := repository.NewInMemoryTask()
-	groupRep := repository.NewInMemoryGroup()
+	taskRep := in_memory.NewInMemoryTask()
+	groupRep := in_memory.NewInMemoryGroup()
 
 	com := app.Commands{
 		AddNewTaskToGroup:   command.NewAddNewTaskToGroupHandler(groupRep, taskRep),

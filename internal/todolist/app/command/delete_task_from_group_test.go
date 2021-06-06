@@ -2,13 +2,13 @@ package command
 
 import (
 	"github.com/StepanLyahov/ToDoIst/todolist/domain"
-	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository/in_memory"
 	"testing"
 )
 
 func TestDeleteTaskFromGroupValidID(t *testing.T) {
-	repGroup := repository.NewInMemoryGroup()
-	repTask := repository.NewInMemoryTask()
+	repGroup := in_memory.NewInMemoryGroup()
+	repTask := in_memory.NewInMemoryTask()
 
 	taskID, groupID := addRelatedGroupAndTaskInRepo(repTask, repGroup)
 
@@ -30,7 +30,7 @@ func TestDeleteTaskFromGroupValidID(t *testing.T) {
 	}
 }
 
-func addRelatedGroupAndTaskInRepo(tRep repository.InMemoryTask, gRep repository.InMemoryGroup) (taskID domain.TaskID, groupID domain.GroupID) {
+func addRelatedGroupAndTaskInRepo(tRep in_memory.InMemoryTask, gRep in_memory.InMemoryGroup) (taskID domain.TaskID, groupID domain.GroupID) {
 
 	task := domain.NewTaskWithCurrentDate("title", "desc", domain.Priority1)
 	group := domain.NewGroup("titleG", "descG")

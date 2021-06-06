@@ -3,7 +3,7 @@ package command
 import (
 	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
 	"github.com/StepanLyahov/ToDoIst/todolist/domain"
-	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository/in_memory"
 	"testing"
 )
 
@@ -23,7 +23,7 @@ func initGroupHandlerBeforeTest(h *AddNewTaskToGroupHandler) domain.GroupID {
 }
 
 func TestNewAddNewTaskToGroup(t *testing.T) {
-	h := NewAddNewTaskToGroupHandler(repository.NewInMemoryGroup(), repository.NewInMemoryTask())
+	h := NewAddNewTaskToGroupHandler(in_memory.NewInMemoryGroup(), in_memory.NewInMemoryTask())
 	groupId := initGroupHandlerBeforeTest(&h)
 
 	taskDto := query.TaskDto{

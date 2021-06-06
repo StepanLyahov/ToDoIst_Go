@@ -2,7 +2,7 @@ package command
 
 import (
 	"github.com/StepanLyahov/ToDoIst/todolist/domain"
-	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository/in_memory"
 	"testing"
 )
 
@@ -12,7 +12,7 @@ func TestCreateGroup(t *testing.T) {
 		Description: "Description",
 	}
 
-	h := NewCreateGroupHandler(repository.NewInMemoryGroup())
+	h := NewCreateGroupHandler(in_memory.NewInMemoryGroup())
 	id, err := h.Execute(gDto)
 
 	if err != nil {

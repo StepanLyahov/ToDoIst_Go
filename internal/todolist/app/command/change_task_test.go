@@ -3,14 +3,14 @@ package command
 import (
 	"github.com/StepanLyahov/ToDoIst/todolist/app/query"
 	"github.com/StepanLyahov/ToDoIst/todolist/domain"
-	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository/in_memory"
 	"testing"
 )
 
 func TestChangeTask(t *testing.T) {
 	title := "lol"
 
-	h := NewChangeTaskHandler(repository.NewInMemoryTask())
+	h := NewChangeTaskHandler(in_memory.NewInMemoryTask())
 	task := initTaskBeforeTest(&h)
 
 	dtoTask := query.TaskToDto(task)

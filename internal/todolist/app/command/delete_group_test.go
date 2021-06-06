@@ -2,13 +2,13 @@ package command
 
 import (
 	"github.com/StepanLyahov/ToDoIst/todolist/domain"
-	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository"
+	"github.com/StepanLyahov/ToDoIst/todolist/infrastructure/repository/in_memory"
 	"log"
 	"testing"
 )
 
 func TestDeleteGroup(t *testing.T) {
-	h := NewDeleteGroupHandler(repository.NewInMemoryGroup())
+	h := NewDeleteGroupHandler(in_memory.NewInMemoryGroup())
 
 	group := domain.NewGroup("", "")
 	log.Print(group.ID())
@@ -31,7 +31,7 @@ func TestDeleteGroup(t *testing.T) {
 }
 
 func TestDeleteGroupWithInvalidID(t *testing.T) {
-	h := NewDeleteGroupHandler(repository.NewInMemoryGroup())
+	h := NewDeleteGroupHandler(in_memory.NewInMemoryGroup())
 
 	err := h.Execute("invalid uuid")
 	if err == nil {
