@@ -94,6 +94,33 @@ func (H HTTPServer) ChangeTask(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (H HTTPServer) GetTaskById(w http.ResponseWriter, r *http.Request, taskID string) {
+
+	execute, err := H.app.Queries.GetTaskById.Execute(taskID)
+	if err != nil {
+		buildResponseWithErr("Err find task", err.Error(), w, http.StatusInternalServerError)
+		return
+	}
+
+	priorityInt := int(execute.Priority)
+
+	createDateStr := execute.EndDate.String()
+	currentDoingDateStr := execute.CurrentDoingDate.String()
+	endDateStr := execute.EndDate.String()
+
+	taskJson := Task{
+		CreateDate:       &createDateStr,
+		CurrentDoingDate: &currentDoingDateStr,
+		Description:      &execute.Description,
+		EndDate:          &endDateStr,
+		Id:               &execute.Id,
+		Priority:         &priorityInt,
+		Title:            &execute.Title,
+	}
+
+	buildResponse(taskJson, w, http.StatusOK)
+}
+
 func bodyToTask(w http.ResponseWriter, r *http.Request) (query.TaskDto, error) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {

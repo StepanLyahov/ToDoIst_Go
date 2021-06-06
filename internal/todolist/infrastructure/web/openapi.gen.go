@@ -74,6 +74,9 @@ type ServerInterface interface {
 
 	// (POST /task/change)
 	ChangeTask(w http.ResponseWriter, r *http.Request)
+
+	// (GET /task/{taskID})
+	GetTaskById(w http.ResponseWriter, r *http.Request, taskID string)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -166,6 +169,32 @@ func (siw *ServerInterfaceWrapper) ChangeTask(w http.ResponseWriter, r *http.Req
 	handler(w, r.WithContext(ctx))
 }
 
+// GetTaskById operation middleware
+func (siw *ServerInterfaceWrapper) GetTaskById(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var err error
+
+	// ------------- Path parameter "taskID" -------------
+	var taskID string
+
+	err = runtime.BindStyledParameter("simple", false, "taskID", chi.URLParam(r, "taskID"), &taskID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Invalid format for parameter taskID: %s", err), http.StatusBadRequest)
+		return
+	}
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetTaskById(w, r, taskID)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
 // Handler creates http.Handler with routing matching OpenAPI spec.
 func Handler(si ServerInterface) http.Handler {
 	return HandlerWithOptions(si, ChiServerOptions{})
@@ -214,6 +243,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/task/change", wrapper.ChangeTask)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/task/{taskID}", wrapper.GetTaskById)
 	})
 
 	return r

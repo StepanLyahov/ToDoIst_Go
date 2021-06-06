@@ -94,6 +94,25 @@ paths:
         '201':
           description: task changed
 
+  /task/{taskID}:
+    get:
+      operationId: GetTaskById
+      parameters:
+        - in: path
+          name: taskID
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: group id
+      responses:
+        '200':
+          description: found task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
 
 components:
   schemas:
