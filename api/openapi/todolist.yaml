@@ -80,6 +80,21 @@ paths:
                 type: string
           description: task created
 
+  /task/change:
+    post:
+      operationId: ChangeTask
+      requestBody:
+        description: change a task
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '201':
+          description: task changed
+
+
 components:
   schemas:
     CreateGroupRequest:

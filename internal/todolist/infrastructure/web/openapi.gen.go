@@ -48,11 +48,17 @@ type CreateGroupJSONBody CreateGroupRequest
 // AddTaskInGroupJSONBody defines parameters for AddTaskInGroup.
 type AddTaskInGroupJSONBody Task
 
+// ChangeTaskJSONBody defines parameters for ChangeTask.
+type ChangeTaskJSONBody Task
+
 // CreateGroupJSONRequestBody defines body for CreateGroup for application/json ContentType.
 type CreateGroupJSONRequestBody CreateGroupJSONBody
 
 // AddTaskInGroupJSONRequestBody defines body for AddTaskInGroup for application/json ContentType.
 type AddTaskInGroupJSONRequestBody AddTaskInGroupJSONBody
+
+// ChangeTaskJSONRequestBody defines body for ChangeTask for application/json ContentType.
+type ChangeTaskJSONRequestBody ChangeTaskJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -65,6 +71,9 @@ type ServerInterface interface {
 
 	// (POST /group/{groupId}/addTask)
 	AddTaskInGroup(w http.ResponseWriter, r *http.Request, groupId string)
+
+	// (POST /task/change)
+	ChangeTask(w http.ResponseWriter, r *http.Request)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -142,6 +151,21 @@ func (siw *ServerInterfaceWrapper) AddTaskInGroup(w http.ResponseWriter, r *http
 	handler(w, r.WithContext(ctx))
 }
 
+// ChangeTask operation middleware
+func (siw *ServerInterfaceWrapper) ChangeTask(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	var handler = func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ChangeTask(w, r)
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler(w, r.WithContext(ctx))
+}
+
 // Handler creates http.Handler with routing matching OpenAPI spec.
 func Handler(si ServerInterface) http.Handler {
 	return HandlerWithOptions(si, ChiServerOptions{})
@@ -187,6 +211,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Post(options.BaseURL+"/group/{groupId}/addTask", wrapper.AddTaskInGroup)
+	})
+	r.Group(func(r chi.Router) {
+		r.Post(options.BaseURL+"/task/change", wrapper.ChangeTask)
 	})
 
 	return r

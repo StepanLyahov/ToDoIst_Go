@@ -67,35 +67,63 @@ func (H HTTPServer) GetGroup(w http.ResponseWriter, r *http.Request, groupId str
 }
 
 func (H HTTPServer) AddTaskInGroup(w http.ResponseWriter, r *http.Request, groupId string) {
+	taskDto, err := bodyToTask(w, r)
+	if err != nil {
+		return
+	}
+
+	execute, err := H.app.Commands.AddNewTaskToGroup.Execute(groupId, taskDto)
+	if err != nil {
+		buildResponseWithErr("Err add task in group", err.Error(), w, http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Location", execute.String())
+	w.WriteHeader(http.StatusCreated)
+}
+
+func (H HTTPServer) ChangeTask(w http.ResponseWriter, r *http.Request) {
+	taskDto, err := bodyToTask(w, r)
+	if err != nil {
+		return
+	}
+
+	err = H.app.Commands.ChangeTask.Execute(taskDto)
+	if err != nil {
+		buildResponseWithErr("Err change task", err.Error(), w, http.StatusInternalServerError)
+	}
+}
+
+func bodyToTask(w http.ResponseWriter, r *http.Request) (query.TaskDto, error) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		buildResponseWithErr("Err read body", err.Error(), w, http.StatusInternalServerError)
-		return
+		return query.TaskDto{}, err
 	}
 
 	res := Task{}
 	err = json.Unmarshal(reqBody, &res)
 	if err != nil {
 		buildResponseWithErr("Err parse body", err.Error(), w, http.StatusInternalServerError)
-		return
+		return query.TaskDto{}, err
 	}
 
 	createDateParsed, err := time.Parse(time.RFC3339, *res.CreateDate)
 	if err != nil {
 		buildResponseWithErr("Err parse date", err.Error(), w, http.StatusInternalServerError)
-		return
+		return query.TaskDto{}, err
 	}
 
 	currentDoingDateParsed, err := time.Parse(time.RFC3339, *res.CurrentDoingDate)
 	if err != nil {
 		buildResponseWithErr("Err parse date", err.Error(), w, http.StatusInternalServerError)
-		return
+		return query.TaskDto{}, err
 	}
 
 	endDateParsed, err := time.Parse(time.RFC3339, *res.EndDate)
 	if err != nil {
 		buildResponseWithErr("Err parse date", err.Error(), w, http.StatusInternalServerError)
-		return
+		return query.TaskDto{}, err
 	}
 
 	taskDto := query.TaskDto{
@@ -108,14 +136,7 @@ func (H HTTPServer) AddTaskInGroup(w http.ResponseWriter, r *http.Request, group
 		EndDate:          endDateParsed,
 	}
 
-	execute, err := H.app.Commands.AddNewTaskToGroup.Execute(groupId, taskDto)
-	if err != nil {
-		buildResponseWithErr("Err add task in group", err.Error(), w, http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Location", execute.String())
-	w.WriteHeader(http.StatusCreated)
+	return taskDto, nil
 }
 
 func buildResponse(v interface{}, w http.ResponseWriter, status int) {
