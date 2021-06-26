@@ -7,13 +7,31 @@ import (
 	"testing"
 )
 
-var db *sql.DB
-
 func TestNewPostgresGroup(t *testing.T) {
+	db, err := initPostgresConnection()
+	if err != nil {
+		panic(err)
+	}
+
 	_ = NewPostgresGroup(db)
 }
 
-func init() {
+func TestPostgresGroup_GetAll(t *testing.T) {
+	db, err := initPostgresConnection()
+	if err != nil {
+		panic(err)
+	}
+
+	rep := NewPostgresGroup(db)
+
+	res := rep.GetAll()
+
+	for _, g := range res {
+		log.Printf("Group['%v' '%v' '%v', Tasks {%v}]", g.ID(), g.Title(), g.Description(), g.Tasks())
+	}
+}
+
+func initPostgresConnection() (*sql.DB, error) {
 	user := "postgres"
 	password := "postgres"
 	dbname := "stepanlahov"
@@ -22,12 +40,9 @@ func init() {
 	connStr := fmt.Sprintf("user=%v password=%v dbname=%v sslmode=disable",
 		user, password, dbname)
 
-	var err error
+	db, err := sql.Open(dbtype, connStr)
 
-	db, err = sql.Open(dbtype, connStr)
-	if err != nil {
-		panic(err)
-	}
+	log.Print("Connected!!!")
 
-	log.Printf("Connection!!!!!")
+	return db, err
 }
