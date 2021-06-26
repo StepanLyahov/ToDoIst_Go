@@ -37,6 +37,15 @@ func NewGroup(title string, description string) *Group {
 	}
 }
 
+func Build(id GroupID, title string, description string, taskIDs []TaskID) *Group {
+	return &Group{
+		id:          id,
+		title:       title,
+		description: description,
+		taskIDs:     taskIDs,
+	}
+}
+
 func (g *Group) ID() GroupID {
 	return g.id
 }
