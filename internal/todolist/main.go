@@ -13,7 +13,6 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/labstack/gommon/log"
 	"net/http"
-	"sync"
 )
 
 func main() {
@@ -53,25 +52,18 @@ func newApplication() app.Application {
 	}
 }
 
-var once sync.Once
-
 func initPostgresConnection() (*sql.DB, error) {
 	user := "postgres"
 	password := "postgres"
 	dbname := "stepanlahov"
 	dbtype := "postgres"
 
-	var err error
-	var db *sql.DB
+	connStr := fmt.Sprintf("user=%v password=%v dbname=%v sslmode=disable",
+		user, password, dbname)
 
-	once.Do(func() {
-		connStr := fmt.Sprintf("user=%v password=%v dbname=%v sslmode=disable",
-			user, password, dbname)
+	db, err := sql.Open(dbtype, connStr)
 
-		db, err = sql.Open(dbtype, connStr)
-
-		log.Print("Connected!!!")
-	})
+	log.Print("Connected!!!")
 
 	return db, err
 }

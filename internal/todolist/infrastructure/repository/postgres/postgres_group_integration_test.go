@@ -1,11 +1,33 @@
 package postgres
 
-import "testing"
+import (
+	"database/sql"
+	"fmt"
+	"log"
+	"testing"
+)
 
-func TestCheckConnection(t *testing.T) {
+var db *sql.DB
+
+func TestNewPostgresGroup(t *testing.T) {
+	_ = NewPostgresGroup(db)
+}
+
+func init() {
 	user := "postgres"
 	password := "postgres"
 	dbname := "stepanlahov"
+	dbtype := "postgres"
 
-	_ = NewPostgresGroup(user, password, dbname)
+	connStr := fmt.Sprintf("user=%v password=%v dbname=%v sslmode=disable",
+		user, password, dbname)
+
+	var err error
+
+	db, err = sql.Open(dbtype, connStr)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Printf("Connection!!!!!")
 }
