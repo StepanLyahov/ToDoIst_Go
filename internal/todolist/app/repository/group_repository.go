@@ -7,5 +7,5 @@ type GroupRepository interface {
 	Update(group *domain.Group) error
 	GetByID(id domain.GroupID) (*domain.Group, error)
 	DelByID(id domain.GroupID) error
-	GetAll() []*domain.Group
+	GetAll() ([]*domain.Group, error)
 }

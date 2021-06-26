@@ -24,7 +24,10 @@ func TestPostgresGroup_GetAll(t *testing.T) {
 
 	rep := NewPostgresGroup(db)
 
-	res := rep.GetAll()
+	res, err := rep.GetAll()
+	if err != nil {
+		t.Fatalf("Err must be nil, but %v", err)
+	}
 
 	for _, g := range res {
 		log.Printf("Group['%v' '%v' '%v', Tasks {%v}]", g.ID(), g.Title(), g.Description(), g.Tasks())

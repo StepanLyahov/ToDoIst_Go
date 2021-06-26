@@ -51,11 +51,11 @@ func (i InMemoryGroup) DelByID(id domain.GroupID) error {
 	return nil
 }
 
-func (i InMemoryGroup) GetAll() []*domain.Group {
+func (i InMemoryGroup) GetAll() ([]*domain.Group, error) {
 	var groups []*domain.Group
 
 	for _, group := range i.db {
 		groups = append(groups, group)
 	}
-	return groups
+	return groups, nil
 }

@@ -32,13 +32,13 @@ func (p *PostgresGroup) DelByID(id domain.GroupID) error {
 	panic("implement me")
 }
 
-func (p *PostgresGroup) GetAll() []*domain.Group {
+func (p *PostgresGroup) GetAll() ([]*domain.Group, error) {
 	groups := make([]*domain.Group, 0, 10)
 
 	rows, err := p.db.Query("select uuid, title, description from public.\"group\"")
 	if err != nil {
 		log.Printf("Error Query: %v", err)
-		return nil
+		return nil, err
 	}
 
 	for rows.Next() {
@@ -50,7 +50,7 @@ func (p *PostgresGroup) GetAll() []*domain.Group {
 		err := rows.Scan(&uuidStr, &title, &description)
 		if err != nil {
 			log.Printf("Error Rows Scan: %v", err)
-			return nil
+			return nil, err
 		}
 
 		taskIDs, err = p.findAllTaskIDsByGroupId(uuidStr)
@@ -65,7 +65,7 @@ func (p *PostgresGroup) GetAll() []*domain.Group {
 		}
 	}
 
-	return groups
+	return groups, nil
 }
 
 func (p *PostgresGroup) findAllTaskIDsByGroupId(groupId string) ([]domain.TaskID, error) {
