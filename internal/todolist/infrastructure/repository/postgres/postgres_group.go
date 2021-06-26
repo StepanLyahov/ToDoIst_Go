@@ -40,6 +40,7 @@ func (p *PostgresGroup) GetAll() ([]*domain.Group, error) {
 		log.Printf("Error Query: %v", err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var uuidStr string
@@ -77,6 +78,7 @@ func (p *PostgresGroup) findAllTaskIDsByGroupId(groupId string) ([]domain.TaskID
 		log.Printf("Error Query: %v", err)
 		return nil, err
 	}
+	defer rows.Close()
 
 	for rows.Next() {
 		var uuidStr string
