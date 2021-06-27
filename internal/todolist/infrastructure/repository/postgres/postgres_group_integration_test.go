@@ -3,6 +3,7 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
+	"github.com/StepanLyahov/ToDoIst/todolist/domain"
 	"log"
 	"testing"
 )
@@ -31,6 +32,26 @@ func TestPostgresGroup_GetAll(t *testing.T) {
 
 	for _, g := range res {
 		log.Printf("Group['%v' '%v' '%v', Tasks {%v}]", g.ID(), g.Title(), g.Description(), g.Tasks())
+	}
+}
+
+func TestPostgresGroup_Save(t *testing.T) {
+	db, err := initPostgresConnection()
+	if err != nil {
+		panic(err)
+	}
+
+	rep := NewPostgresGroup(db)
+
+	test := domain.NewGroup("new", "new")
+	err = test.AddTask(domain.NewTaskID())
+	if err != nil {
+		t.Fatalf("Err must be nil, but %v", err)
+	}
+
+	err = rep.Save(test)
+	if err != nil {
+		t.Fatalf("Err must be nil, but %v", err)
 	}
 }
 
