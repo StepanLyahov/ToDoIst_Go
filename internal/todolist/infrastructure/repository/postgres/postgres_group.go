@@ -54,7 +54,11 @@ func (p *PostgresGroup) GetAll() ([]*domain.Group, error) {
 			return nil, err
 		}
 
-		taskIDs, err = p.findAllTaskIDsByGroupId(uuidStr)
+		taskIDs, taskErr := p.findAllTaskIDsByGroupId(uuidStr)
+		if taskErr != nil {
+			log.Printf("Find TaskIds by Group id: %v", taskErr)
+			return nil, taskErr
+		}
 
 		uuid, err := domain.NewGroupIDFromString(uuidStr)
 
