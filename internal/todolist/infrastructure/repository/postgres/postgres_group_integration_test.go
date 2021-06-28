@@ -43,7 +43,7 @@ func TestPostgresGroup_Save(t *testing.T) {
 
 	rep := NewPostgresGroup(db)
 
-	test := domain.NewGroup("new", "new")
+	test := domain.NewGroup("new2", "new2")
 	err = test.AddTask(domain.NewTaskID())
 	if err != nil {
 		t.Fatalf("Err must be nil, but %v", err)
@@ -78,6 +78,25 @@ func TestPostgresGroup_GetByID(t *testing.T) {
 	}
 
 	log.Printf("Group['%v' '%v' '%v', Tasks {%v}]", g.ID(), g.Title(), g.Description(), g.Tasks())
+}
+
+func TestPostgresGroup_DelByID(t *testing.T) {
+	db, err := initPostgresConnection()
+	if err != nil {
+		panic(err)
+	}
+
+	rep := NewPostgresGroup(db)
+
+	fromString, err := domain.NewGroupIDFromString("2a0b23ba-bba0-42ce-8a07-f1aee169e3c2")
+	if err != nil {
+		t.Fatalf("Err must be nil, but err: %v", err)
+	}
+
+	err = rep.DelByID(fromString)
+	if err != nil {
+		t.Fatalf("Err must be nil, but err: %v", err)
+	}
 }
 
 func initPostgresConnection() (*sql.DB, error) {

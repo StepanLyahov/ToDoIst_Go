@@ -101,7 +101,43 @@ func (p *PostgresGroup) GetByID(id domain.GroupID) (*domain.Group, error) {
 }
 
 func (p *PostgresGroup) DelByID(id domain.GroupID) error {
-	panic("implement me")
+	begin, beginErr := p.db.Begin()
+	if beginErr != nil {
+		log.Printf("Err create transactional: %v", beginErr)
+		return beginErr
+	}
+
+	stmt, prepareErr := begin.Prepare("delete from public.\"group\" where uuid like $1")
+	if prepareErr != nil {
+		log.Printf("Err build Prepare: %v", prepareErr)
+		return prepareErr
+	}
+	_, execErr := stmt.Exec(id.String())
+	if execErr != nil {
+		log.Printf("Err Exec: %v", execErr)
+		err := begin.Rollback()
+		if err != nil {
+			return err
+		}
+		return execErr
+	}
+
+	tasksErr := p.delAllTaskIDsByGroupId(begin, id.String())
+	if tasksErr != nil {
+		log.Printf("Err Exec: %v", tasksErr)
+		err := begin.Rollback()
+		if err != nil {
+			return err
+		}
+		return tasksErr
+	}
+
+	commitErr := begin.Commit()
+	if commitErr != nil {
+		return commitErr
+	}
+
+	return nil
 }
 
 func (p *PostgresGroup) GetAll() ([]*domain.Group, error) {
@@ -193,4 +229,58 @@ func (p *PostgresGroup) findAllTaskIDsByGroupId(groupId string) ([]domain.TaskID
 	}
 
 	return taskIds, nil
+}
+
+func (p *PostgresGroup) delAllTaskIDsByGroupId(begin *sql.Tx, groupId string) error {
+	taskIds, taskErr := p.findAllTaskIDsByGroupId(groupId)
+	if taskErr != nil {
+		log.Printf("Err getTaskIds Err: %v", taskErr)
+		return taskErr
+	}
+
+	for _, taskId := range taskIds {
+		err := delTask(begin, taskId.String())
+		if err != nil {
+			return err
+		}
+
+		err = delTaskFromGroupTask(begin, taskId.String())
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func delTask(begin *sql.Tx, taskId string) error {
+	stmt, prepareErr := begin.Prepare("delete from public.\"task\" where uuid like $1")
+	if prepareErr != nil {
+		log.Printf("Err build Prepare: %v", prepareErr)
+		return prepareErr
+	}
+
+	_, execErr := stmt.Exec(taskId)
+	if execErr != nil {
+		log.Printf("Err Exec: %v", execErr)
+		return execErr
+	}
+
+	return nil
+}
+
+func delTaskFromGroupTask(begin *sql.Tx, taskId string) error {
+	stmt, prepareErr := begin.Prepare("delete from public.\"group_task\" where task_uuid like $1")
+	if prepareErr != nil {
+		log.Printf("Err build Prepare: %v", prepareErr)
+		return prepareErr
+	}
+
+	_, execErr := stmt.Exec(taskId)
+	if execErr != nil {
+		log.Printf("Err Exec: %v", execErr)
+		return execErr
+	}
+
+	return nil
 }
