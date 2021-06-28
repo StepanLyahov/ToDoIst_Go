@@ -55,6 +55,31 @@ func TestPostgresGroup_Save(t *testing.T) {
 	}
 }
 
+func TestPostgresGroup_GetByID(t *testing.T) {
+	db, err := initPostgresConnection()
+	if err != nil {
+		panic(err)
+	}
+
+	rep := NewPostgresGroup(db)
+
+	fromString, err := domain.NewGroupIDFromString("f8c67835-49ad-4f3e-9e49-4fdb3d62b4e5")
+	if err != nil {
+		t.Fatalf("Err must be nil, but err: %v", err)
+	}
+
+	g, err := rep.GetByID(fromString)
+	if err != nil {
+		t.Fatalf("Err must be nil, but err: %v", err)
+	}
+
+	if g == nil {
+		t.Fatal("Group must be exist")
+	}
+
+	log.Printf("Group['%v' '%v' '%v', Tasks {%v}]", g.ID(), g.Title(), g.Description(), g.Tasks())
+}
+
 func initPostgresConnection() (*sql.DB, error) {
 	user := "postgres"
 	password := "postgres"

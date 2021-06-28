@@ -60,7 +60,44 @@ func (p *PostgresGroup) Update(group *domain.Group) error {
 }
 
 func (p *PostgresGroup) GetByID(id domain.GroupID) (*domain.Group, error) {
-	panic("implement me")
+	query := fmt.Sprintf(
+		"select uuid, title, description from public.\"group\" where uuid like '%v'", id.String())
+
+	rows, err := p.db.Query(query)
+	if err != nil {
+		log.Printf("Error Query: %v", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var uuidStr string
+		var title string
+		var description string
+		var taskIDs []domain.TaskID
+
+		err := rows.Scan(&uuidStr, &title, &description)
+		if err != nil {
+			log.Printf("Error Rows Scan: %v", err)
+			return nil, err
+		}
+
+		taskIDs, taskErr := p.findAllTaskIDsByGroupId(uuidStr)
+		if taskErr != nil {
+			log.Printf("Find TaskIds by Group id: %v", taskErr)
+			return nil, taskErr
+		}
+
+		uuid, err := domain.NewGroupIDFromString(uuidStr)
+
+		if err != nil {
+			log.Printf("Error parsing UUID %v. Err: %v", uuidStr, err)
+		} else {
+			return domain.BuildGroup(uuid, title, description, taskIDs), nil
+		}
+	}
+
+	return nil, nil
 }
 
 func (p *PostgresGroup) DelByID(id domain.GroupID) error {
