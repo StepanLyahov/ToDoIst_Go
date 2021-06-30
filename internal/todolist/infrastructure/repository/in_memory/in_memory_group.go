@@ -23,8 +23,8 @@ func (i InMemoryGroup) Save(group *domain.Group) error {
 }
 
 func (i InMemoryGroup) Update(group *domain.Group) error {
-	_, err := i.db[group.ID()]
-	if err == false {
+	_, ok := i.db[group.ID()]
+	if !ok {
 		return errors.New("not found")
 	}
 
@@ -33,8 +33,8 @@ func (i InMemoryGroup) Update(group *domain.Group) error {
 }
 
 func (i InMemoryGroup) GetByID(id domain.GroupID) (*domain.Group, error) {
-	_, err := i.db[id]
-	if err == false {
+	_, ok := i.db[id]
+	if !ok {
 		return &domain.Group{}, errors.New("not found")
 	}
 
@@ -42,8 +42,8 @@ func (i InMemoryGroup) GetByID(id domain.GroupID) (*domain.Group, error) {
 }
 
 func (i InMemoryGroup) DelByID(id domain.GroupID) error {
-	_, err := i.db[id]
-	if err == false {
+	_, ok := i.db[id]
+	if !ok {
 		return errors.New("not found")
 	}
 

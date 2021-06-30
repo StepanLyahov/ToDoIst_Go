@@ -23,8 +23,8 @@ func (i InMemoryTask) Save(task *domain.Task) error {
 }
 
 func (i InMemoryTask) Update(task *domain.Task) error {
-	_, err := i.db[task.ID()]
-	if err == false {
+	_, ok := i.db[task.ID()]
+	if !ok {
 		return errors.New("not found")
 	}
 
@@ -34,8 +34,8 @@ func (i InMemoryTask) Update(task *domain.Task) error {
 }
 
 func (i InMemoryTask) GetByID(id domain.TaskID) (*domain.Task, error) {
-	task, err := i.db[id]
-	if err == false {
+	task, ok := i.db[id]
+	if !ok {
 		return &domain.Task{}, errors.New("not found")
 	}
 
@@ -43,8 +43,8 @@ func (i InMemoryTask) GetByID(id domain.TaskID) (*domain.Task, error) {
 }
 
 func (i InMemoryTask) DelByID(id domain.TaskID) error {
-	_, err := i.db[id]
-	if err == false {
+	_, ok := i.db[id]
+	if !ok {
 		return errors.New("not found")
 	}
 
